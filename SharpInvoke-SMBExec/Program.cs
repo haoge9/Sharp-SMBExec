@@ -8,10 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
-using PowerArgs;
+using CommandLineParser;
+using CommandLineParser.Arguments;
 
 namespace SharpInvoke_SMBExec
 {
+    /*/
     public class SMBExecArgs
     {
         [HelpHook, ArgShortcut("-?")]
@@ -47,24 +49,104 @@ namespace SharpInvoke_SMBExec
         [ArgShortcut("-dbg"),ArgDescription("Switch, Enabled debugging"), ArgDefaultValue(false)]
         public bool Debug { get; set; }
     }
+    //*/
+
+    public class SMBExecArgs
+    {
+        [SwitchArgument('?', "help", false, Description = "Set whether help show or not")]
+        public bool Help;
+
+        //[ValueArgument(typeof(decimal), 'v', "version", Description = "Set desired version")]
+        //public decimal version;
+
+        //[EnumeratedValueArgument(typeof(string), 'u', "username", AllowedValues = "red;green;blue")]
+        [ValueArgument(typeof(string), 'u', "username", Description = "Username to use for authentication")]
+        public string Username;
+
+        [ValueArgument(typeof(string), 'h', "hash", Description = "NTLM Password hash for authentication. This module will accept either LM:NTLM or NTLM format")]
+        public string Hash;
+
+        [ValueArgument(typeof(string), 'd', "domain", Description = "Domain to use for authentication. This parameter is not needed with local accounts or when using @domain after the username")]
+        public string Domain;
+
+        [ValueArgument(typeof(string), 't', "Target", Description = "Hostname or IP Address of the target.")]
+        public string Target;
+
+        [ValueArgument(typeof(string), 'c', "Command", Description = "Command to execute on the target. If a command is not specified, the function will check to see if the username and hash provide local admin access on the target")]
+        public string Command;
+
+        [ValueArgument(typeof(string), 's', "Service", Description = "Default = 20 Character Random. The Name of the service to create and delete on the target.")]
+        public string Service;
+
+        [ValueArgument(typeof(string), 'o', "ComSpec", Description = "Default = Disabled: Prepend %COMSPEC% /C to Command")]
+        public bool ComSpec;
+
+        [ValueArgument(typeof(string), 'm', "SMB1", Description = "Force SMB1. The default behavior is to perform SMB Version negotiation and use SMB2 if it's supported by the target")]
+        public bool SMB1;
+
+        [ValueArgument(typeof(string), 'p', "Sleep", Description = "Time in seconds to sleep. Change this value if you're getting weird results.")]
+        public int Sleep;
+
+        [SwitchArgument('g', "Debug", false, Description = "Switch, Enabled debugging")]
+        public bool Debug;
+
+
+        //[HelpHook, ArgShortcut("-?")]
+        //public bool Help { get; set; }
+
+        //[ArgShortcut("-u"), ArgDescription("Username to use for authentication"), ArgRequired()]
+        //public string Username { get; set; }
+
+        //[ArgShortcut("-h"), ArgDescription("NTLM Password hash for authentication. This module will accept either LM:NTLM or NTLM format"), ArgRequired()]
+        //public string Hash { get; set; }
+
+        //[ArgShortcut("-d"), ArgDescription("Domain to use for authentication. This parameter is not needed with local accounts or when using @domain after the username")]
+        //public string Domain { get; set; }
+
+        //[ArgShortcut("-t"), ArgDescription("Hostname or IP Address of the target.")]
+        //public string Target { get; set; }
+
+        //[ArgShortcut("-c"), ArgDescription("Command to execute on the target. If a command is not specified, the function will check to see if the username and hash provide local admin access on the target")]
+        //public string Command { get; set; }
+
+        //[ArgShortcut("-s"), ArgDescription("Default = 20 Character Random. The Name of the service to create and delete on the target.")]
+        //public string Service { get; set; }
+
+        //[ArgShortcut("-cc"), ArgDescription("Default = Disabled: Prepend %COMSPEC% /C to Command"), ArgDefaultValue(false)]
+        //public bool ComSpec { get; set; }
+
+        //[ArgShortcut("-v1"), ArgDescription("Force SMB1. The default behavior is to perform SMB Version negotiation and use SMB2 if it's supported by the target"), ArgDefaultValue(false)]
+        //public bool SMB1 { get; set; }
+
+        //[ArgShortcut("-st"), ArgDescription("Time in seconds to sleep. Change this value if you're getting weird results."), ArgDefaultValue(15)]
+        //public int Sleep { get; set; }
+
+        //[ArgShortcut("-dbg"), ArgDescription("Switch, Enabled debugging"), ArgDefaultValue(false)]
+        //public bool Debug { get; set; }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            SMBExecArgs parsed = null;
+            SMBExecArgs parsed = new SMBExecArgs();
+
+            CommandLineParser.CommandLineParser parser = new CommandLineParser.CommandLineParser(); 
             try
             {
-                parsed = Args.Parse<SMBExecArgs>(args);
+                parser.ExtractArgumentAttributes(parsed);
+                parser.ParseCommandLine(args);
             }
-            catch (MissingArgException e)
+            catch (Exception e)
             {
-                Console.WriteLine("Missing Required Parameter!");
+                Console.WriteLine("Missing Required Parameter:"+e.Message);               
+                parser.ShowUsage();
                 Environment.Exit(0);
             }
 
-
-            if (parsed == null)
+            if (parsed.Help)
             {
+                parser.ShowUsage();
                 Environment.Exit(0);
             }
 
@@ -72,6 +154,11 @@ namespace SharpInvoke_SMBExec
             string target = parsed.Target;
             string username = parsed.Username;
             string domain = parsed.Domain;
+
+            if (domain == null)
+                domain = "";
+
+            //string command = "start " + parsed.Command;
             string command = parsed.Command;
             string SMB_version = "";
             string hash = parsed.Hash;
