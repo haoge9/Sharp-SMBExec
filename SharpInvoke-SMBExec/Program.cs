@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
-using CommandLineParser;
-using CommandLineParser.Arguments;
+//using CommandLineParser;
+//using CommandLineParser.Arguments;
 
 namespace SharpInvoke_SMBExec
 {
@@ -51,114 +51,137 @@ namespace SharpInvoke_SMBExec
     }
     //*/
 
+    //public class SMBExecArgs
+    //{
+    //    [SwitchArgument('?', "help", false, Description = "Set whether help show or not")]
+    //    public bool Help;
+
+    //    //[ValueArgument(typeof(decimal), 'v', "version", Description = "Set desired version")]
+    //    //public decimal version;
+
+    //    //[EnumeratedValueArgument(typeof(string), 'u', "username", AllowedValues = "red;green;blue")]
+    //    [ValueArgument(typeof(string), 'u', "username", Description = "Username to use for authentication")]
+    //    public string Username;
+
+    //    [ValueArgument(typeof(string), 'h', "hash", Description = "NTLM Password hash for authentication. This module will accept either LM:NTLM or NTLM format")]
+    //    public string Hash;
+
+    //    [ValueArgument(typeof(string), 'd', "domain", Description = "Domain to use for authentication. This parameter is not needed with local accounts or when using @domain after the username")]
+    //    public string Domain;
+
+    //    [ValueArgument(typeof(string), 't', "Target", Description = "Hostname or IP Address of the target.")]
+    //    public string Target;
+
+    //    [ValueArgument(typeof(string), 'c', "Command", Description = "Command to execute on the target. If a command is not specified, the function will check to see if the username and hash provide local admin access on the target")]
+    //    public string Command;
+
+    //    [ValueArgument(typeof(string), 's', "Service", Description = "Default = 20 Character Random. The Name of the service to create and delete on the target.")]
+    //    public string Service;
+
+    //    [ValueArgument(typeof(string), 'o', "ComSpec", Description = "Default = Disabled: Prepend %COMSPEC% /C to Command")]
+    //    public bool ComSpec;
+
+    //    [ValueArgument(typeof(string), 'm', "SMB1", Description = "Force SMB1. The default behavior is to perform SMB Version negotiation and use SMB2 if it's supported by the target")]
+    //    public bool SMB1;
+
+    //    [ValueArgument(typeof(string), 'p', "Sleep", Description = "Time in seconds to sleep. Change this value if you're getting weird results.")]
+    //    public int Sleep;
+
+    //    [SwitchArgument('g', "Debug", false, Description = "Switch, Enabled debugging")]
+    //    public bool Debug;
+    //}
+
+
     public class SMBExecArgs
     {
-        [SwitchArgument('?', "help", false, Description = "Set whether help show or not")]
-        public bool Help;
-
-        //[ValueArgument(typeof(decimal), 'v', "version", Description = "Set desired version")]
-        //public decimal version;
-
-        //[EnumeratedValueArgument(typeof(string), 'u', "username", AllowedValues = "red;green;blue")]
-        [ValueArgument(typeof(string), 'u', "username", Description = "Username to use for authentication")]
         public string Username;
 
-        [ValueArgument(typeof(string), 'h', "hash", Description = "NTLM Password hash for authentication. This module will accept either LM:NTLM or NTLM format")]
         public string Hash;
 
-        [ValueArgument(typeof(string), 'd', "domain", Description = "Domain to use for authentication. This parameter is not needed with local accounts or when using @domain after the username")]
         public string Domain;
 
-        [ValueArgument(typeof(string), 't', "Target", Description = "Hostname or IP Address of the target.")]
         public string Target;
 
-        [ValueArgument(typeof(string), 'c', "Command", Description = "Command to execute on the target. If a command is not specified, the function will check to see if the username and hash provide local admin access on the target")]
         public string Command;
 
-        [ValueArgument(typeof(string), 's', "Service", Description = "Default = 20 Character Random. The Name of the service to create and delete on the target.")]
         public string Service;
 
-        [ValueArgument(typeof(string), 'o', "ComSpec", Description = "Default = Disabled: Prepend %COMSPEC% /C to Command")]
         public bool ComSpec;
 
-        [ValueArgument(typeof(string), 'm', "SMB1", Description = "Force SMB1. The default behavior is to perform SMB Version negotiation and use SMB2 if it's supported by the target")]
         public bool SMB1;
 
-        [ValueArgument(typeof(string), 'p', "Sleep", Description = "Time in seconds to sleep. Change this value if you're getting weird results.")]
         public int Sleep;
 
-        [SwitchArgument('g', "Debug", false, Description = "Switch, Enabled debugging")]
+        public bool Help;
+
         public bool Debug;
 
-
-        //[HelpHook, ArgShortcut("-?")]
-        //public bool Help { get; set; }
-
-        //[ArgShortcut("-u"), ArgDescription("Username to use for authentication"), ArgRequired()]
-        //public string Username { get; set; }
-
-        //[ArgShortcut("-h"), ArgDescription("NTLM Password hash for authentication. This module will accept either LM:NTLM or NTLM format"), ArgRequired()]
-        //public string Hash { get; set; }
-
-        //[ArgShortcut("-d"), ArgDescription("Domain to use for authentication. This parameter is not needed with local accounts or when using @domain after the username")]
-        //public string Domain { get; set; }
-
-        //[ArgShortcut("-t"), ArgDescription("Hostname or IP Address of the target.")]
-        //public string Target { get; set; }
-
-        //[ArgShortcut("-c"), ArgDescription("Command to execute on the target. If a command is not specified, the function will check to see if the username and hash provide local admin access on the target")]
-        //public string Command { get; set; }
-
-        //[ArgShortcut("-s"), ArgDescription("Default = 20 Character Random. The Name of the service to create and delete on the target.")]
-        //public string Service { get; set; }
-
-        //[ArgShortcut("-cc"), ArgDescription("Default = Disabled: Prepend %COMSPEC% /C to Command"), ArgDefaultValue(false)]
-        //public bool ComSpec { get; set; }
-
-        //[ArgShortcut("-v1"), ArgDescription("Force SMB1. The default behavior is to perform SMB Version negotiation and use SMB2 if it's supported by the target"), ArgDefaultValue(false)]
-        //public bool SMB1 { get; set; }
-
-        //[ArgShortcut("-st"), ArgDescription("Time in seconds to sleep. Change this value if you're getting weird results."), ArgDefaultValue(15)]
-        //public int Sleep { get; set; }
-
-        //[ArgShortcut("-dbg"), ArgDescription("Switch, Enabled debugging"), ArgDefaultValue(false)]
-        //public bool Debug { get; set; }
     }
 
     class Program
     {
+        //Sharp-InvokeWMIExec.exe target_ip test\username hash command
+        //Sharp-InvokeWMIExec.exe 192.168.1.100 User 161cff0846hfe596a5d45b8186y98a24 "calc.exe"
+        //Sharp-InvokeWMIExec.exe 192.168.1.100 User 161cff0846hfe596a5d45b8186y98a24 "calc.exe 123" nowait
+        public static void displayHelp(string message)
+        {
+            if (message != null)
+            {
+                Console.WriteLine("{0}", message);
+            }
+            Console.WriteLine("\r\nUsage: Sharp-InvokeWMIExec.exe target_ip test\\username hash command [nowait]");
+            Console.WriteLine("\r\nExample: Sharp-InvokeWMIExec.exe 192.168.1.100 user hashhashhashhash \"calc.exe test\" nowait");
+
+            Environment.Exit(-1);
+        }
+
+        static SMBExecArgs ParseCommandLine(string[] args)
+        {
+            int argsLength = args.Length;
+            if (argsLength < 4)
+            {
+                return null;
+            }
+           
+            SMBExecArgs parsed = new SMBExecArgs();
+            parsed.Debug = false;
+            parsed.Help = false;
+            parsed.SMB1 = false;
+            parsed.ComSpec = false;
+            parsed.Domain = "";
+            //parsed.Sleep = 100;
+
+
+            parsed.Target   = args[0];
+            parsed.Username = args[1];
+            parsed.Hash     = args[2];
+            parsed.Command  = args[3];
+
+            if (argsLength >= 5)
+            {
+                parsed.ComSpec = (args[4] == "nowait");
+            }
+            
+            return parsed;
+        }
         static void Main(string[] args)
         {
-            SMBExecArgs parsed = new SMBExecArgs();
+            SMBExecArgs parsed = null;
 
-            CommandLineParser.CommandLineParser parser = new CommandLineParser.CommandLineParser(); 
-            try
+            if (args != null)
             {
-                parser.ExtractArgumentAttributes(parsed);
-                parser.ParseCommandLine(args);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Missing Required Parameter:"+e.Message);               
-                parser.ShowUsage();
-                Environment.Exit(0);
+                parsed = ParseCommandLine(args);
             }
 
-            if (parsed.Help)
+            if (parsed == null)
             {
-                parser.ShowUsage();
-                Environment.Exit(0);
+                displayHelp(null);
             }
-
+                        
             //User Set
             string target = parsed.Target;
             string username = parsed.Username;
             string domain = parsed.Domain;
-
-            if (domain == null)
-                domain = "";
-
-            //string command = "start " + parsed.Command;
             string command = parsed.Command;
             string SMB_version = "";
             string hash = parsed.Hash;
@@ -2099,12 +2122,6 @@ namespace SharpInvoke_SMBExec
             }
         }
 
-        public static void displayHelp(string message)
-        {
-            Console.WriteLine("{0} \r\n Usage: Sharp-InvokeWMIExec.exe -h=\"hash\" -u=\"test\\username\" -t=\"target\" -c=\"command\" ", message);
-            Console.ReadKey();
-            Environment.Exit(-1);
-        }
         public static byte[] getByteRange(byte[] array, int start, int end)
         {
             var newArray = array.Skip(start).Take(end-start+1).ToArray();
