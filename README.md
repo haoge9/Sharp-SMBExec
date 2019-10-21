@@ -9,11 +9,13 @@ This Assembly will allow you to execute a command on a target machine using SMB 
 
 
 # Usage
+```
 Sharp-InvokeWMIExec.exe target_ip test\username hash command
+```
 
 # Example
+```
 Sharp-InvokeWMIExec.exe 192.168.1.100 User 161cff0846hfe596a5d45b8186y98a24 "calc.exe"
 Sharp-InvokeWMIExec.exe 192.168.1.100 User 161cff0846hfe596a5d45b8186y98a24 "calc.exe 123" nowait
-        
-
+```
 
